@@ -32,3 +32,8 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
+    - name: Build and push image
+      run: |
+        echo "${{ secrets.DOCKERPW }}" | docker login -u "saigopi123456" --password-stdin
+        docker image build -t saigopi123456/java-gradle:latest .
+        docker push saigopi123456/java-gradle:latest
