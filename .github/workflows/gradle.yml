@@ -32,8 +32,26 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
-    - name: Build and push image
+    - name: Create a temporary artifact downloads folder
+      run: mkdir downloads
+    - name: Add artifacts to publish to the temp folder
       run: |
-        echo "${{ secrets.DOCKERPW }}" | docker login -u "saigopi123456" --password-stdin
-        docker image build -t saigopi123456/java-gradle:latest .
-        docker push saigopi123456/java-gradle:latest
+        cd downloads
+        cd ..
+    
+    - name: Use the Upload Artifact GitHub Action
+      uses: actions/upload-artifact@v2
+      with: 
+         name: assets-for-download
+         path: ./build/libs/my-app-1.0-SNAPSHOT.jar
+
+    - name: Build & push Docker image
+      uses: mr-smithers-excellent/docker-build-push@v5
+      with:
+        image: saigopi123456/springboot-images-new
+        tags: latest
+        registry: docker.io
+        dockerfile: Dockerfile
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    
