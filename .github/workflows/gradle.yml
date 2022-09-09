@@ -43,7 +43,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with: 
          name: assets-for-download
-         path: ./build/libs/my-app-1.0-SNAPSHOT.jar
+         path: /usr/app/my-app-1.0-SNAPSHOT.jar
 
     - name: Build & push Docker image
       uses: mr-smithers-excellent/docker-build-push@v5
